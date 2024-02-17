@@ -1,0 +1,100 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AddMember {
+  taskId: String!
+  userId: String!
+}
+
+input CreateSubTask {
+  content: String
+  dueDate: DateTime
+  status: String
+  taskId: String!
+  title: String!
+}
+
+input CreateTask {
+  creatorId: String!
+  title: String!
+}
+
+input CreateUser {
+  email: String!
+  name: String!
+  password: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Member {
+  createdAt: DateTime!
+  id: String
+  taskId: String
+  updatedAt: DateTime!
+  userId: String
+}
+
+type Mutation {
+  addMemberToTask(taskId: String!, userId: String!): Member!
+  createSubTask(createSubTask: CreateSubTask!): Task!
+  createTask(createTask: CreateTask!): Task!
+  createUser(createUser: CreateUser!): User!
+  deleteSubTask(subTaskId: String!): Task!
+  deleteTask(id: String!): Task!
+  removeMemberFromTask(removeMember: AddMember!): Task!
+  updateSubTask(subTaskId: String!, updateSubTask: CreateSubTask!): Task!
+  updateTask(id: String!, updateTask: UpdateTask!): Task!
+}
+
+type Query {
+  getMembers(taskId: String!): [Member!]!
+  getSubTasks(taskId: String!): [SubTask!]!
+  getTask(id: String!): Task
+  getTasks(userId: String!): [Task!]
+  getUser(id: String!): User
+  getUsers: [User!]
+}
+
+type SubTask {
+  content: String!
+  createdAt: DateTime!
+  dueDate: DateTime
+  id: String!
+  status: String!
+  title: String!
+  updatedAt: DateTime!
+}
+
+type Task {
+  content: String!
+  createdAt: DateTime!
+  creatorId: User!
+  dueDate: DateTime
+  id: String!
+  members: [Member!]
+  status: String!
+  subTasks: [SubTask!]
+  title: String!
+  updatedAt: DateTime!
+}
+
+input UpdateTask {
+  content: String
+  dueDate: DateTime
+  status: String
+  title: String
+}
+
+type User {
+  createdAt: DateTime
+  email: String!
+  id: String!
+  name: String!
+  password: String!
+  updatedAt: DateTime
+}
