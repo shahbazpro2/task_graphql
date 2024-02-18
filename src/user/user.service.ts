@@ -24,6 +24,21 @@ export class UserService {
         });
     }
 
+    async loginUser(email: string, password: string) {
+        const user = await this.prismaService.user.findUnique({
+            where: {
+                email
+            }
+        });
+        if (!user) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+        if (user.password !== password) {
+            throw new HttpException('Password is incorrect', HttpStatus.BAD_REQUEST);
+        }
+        return user;
+    }
+
     async getUser(id: string) {
         return this.prismaService.user.findUnique({
             where: {

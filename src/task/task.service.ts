@@ -27,7 +27,17 @@ export class TaskService {
 
     async getTask(id: string) {
         return this.prismaService.task.findUnique({
-            where: { id }
+            where: { id },
+            include: {
+                members: {
+                    include: {
+                        user: true,
+                        task: true
+                    }
+
+                },
+                subTasks: true
+            }
         });
     }
 

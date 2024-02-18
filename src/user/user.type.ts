@@ -1,17 +1,22 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+import { IsOptional } from "class-validator";
 
 @ObjectType()
 export class User {
-    @Field()
+    @Field({ nullable: true })
+    @IsOptional()
     id: string;
 
-    @Field()
+    @Field({ nullable: true })
+    @IsOptional()
     email: string;
 
-    @Field()
+    @Field({ nullable: true })
+    @IsOptional()
     name: string;
 
-    @Field()
+    @Field({ nullable: true })
+    @IsOptional()
     password: string;
 
     @Field({ nullable: true })

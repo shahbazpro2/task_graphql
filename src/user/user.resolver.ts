@@ -16,6 +16,14 @@ export class UserResolver {
         return this.userService.createUser(createUser)
     }
 
+    @Mutation(() => User)
+    loginUser(
+        @Args('email') email: string,
+        @Args('password') password: string
+    ) {
+        return this.userService.loginUser(email, password);
+    }
+
     @Query(() => User, { nullable: true })
     getUser(
         @Args('id') id: string
