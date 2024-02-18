@@ -2,11 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input AddMember {
-  taskId: String!
-  userId: String!
-}
-
 input CreateSubTask {
   content: String
   dueDate: DateTime
@@ -36,7 +31,8 @@ type Member {
   id: String
   taskId: String
   updatedAt: DateTime!
-  userId: User
+  user: User
+  userId: String
 }
 
 type Mutation {
@@ -47,8 +43,8 @@ type Mutation {
   deleteSubTask(subTaskId: String!): Task!
   deleteTask(id: String!): Task!
   loginUser(email: String!, password: String!): User!
-  removeMemberFromTask(removeMember: AddMember!): Task!
-  updateSubTask(subTaskId: String!, updateSubTask: CreateSubTask!): Task!
+  removeMemberFromTask(taskId: String!, userId: String!): Member
+  updateSubTask(subTaskId: String!, updateSubTask: UpdateSubTask!): Task!
   updateTask(id: String!, updateTask: UpdateTask!): Task!
 }
 
@@ -72,9 +68,10 @@ type SubTask {
 }
 
 type Task {
-  content: String!
+  content: String
   createdAt: DateTime!
-  creatorId: User!
+  creator: User!
+  creatorId: String!
   dueDate: DateTime
   id: String!
   members: [Member!]
@@ -84,9 +81,16 @@ type Task {
   updatedAt: DateTime!
 }
 
+input UpdateSubTask {
+  content: String
+  dueDate: String
+  status: String
+  title: String!
+}
+
 input UpdateTask {
   content: String
-  dueDate: DateTime
+  dueDate: String
   status: String
   title: String
 }
@@ -94,7 +98,7 @@ input UpdateTask {
 type User {
   createdAt: DateTime
   email: String
-  id: String
+  id: ID
   name: String
   password: String
   updatedAt: DateTime

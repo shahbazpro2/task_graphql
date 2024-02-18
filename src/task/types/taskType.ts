@@ -12,14 +12,18 @@ export class Task {
     @Field()
     title: string;
 
-    @Field()
+    @Field({ nullable: true })
+    @IsOptional()
     content: string;
 
     @Field()
     status: string;
 
     @Field()
-    creatorId: User;
+    creatorId: string;
+
+    @Field(() => User)
+    creator: User;
 
     @Field({ nullable: true })
     @IsOptional()

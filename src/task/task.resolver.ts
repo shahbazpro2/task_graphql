@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { TaskService } from './task.service';
 import { Task } from './types/taskType';
 import { CreateTask } from './types/createTask';
@@ -7,6 +7,8 @@ import { CreateSubTask } from './types/createSubTask';
 import { AddMember } from './types/addMember';
 import { SubTask } from './types/subTaskType';
 import { Member } from './types/memberType';
+import { UpdateSubTask } from './types/updateSubTask';
+import { User } from 'src/user/user.type';
 
 @Resolver()
 export class TaskResolver {
@@ -44,11 +46,12 @@ export class TaskResolver {
         return this.taskService.addMemberToTask({ taskId, userId });
     }
 
-    @Mutation(() => Task)
+    @Mutation(() => Member, { nullable: true })
     removeMemberFromTask(
-        @Args('removeMember') removeMember: AddMember,
+        @Args('taskId') taskId: string,
+        @Args('userId') userId: string
     ) {
-        return this.taskService.removeMemberFromTask(removeMember);
+        return this.taskService.removeMemberFromTask({ taskId, userId });
     }
 
     @Mutation(() => Task)
@@ -61,7 +64,7 @@ export class TaskResolver {
     @Mutation(() => Task)
     updateSubTask(
         @Args('subTaskId') subTaskId: string,
-        @Args('updateSubTask') updateSubTask: CreateSubTask
+        @Args('updateSubTask') updateSubTask: UpdateSubTask
     ) {
         return this.taskService.updateSubTask(updateSubTask, subTaskId);
     }

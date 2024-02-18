@@ -4,6 +4,7 @@ import { CreateTask } from './types/createTask';
 import { UpdateTask } from './types/updateTask';
 import { AddMember } from './types/addMember';
 import { CreateSubTask } from './types/createSubTask';
+import { UpdateSubTask } from './types/updateSubTask';
 
 @Injectable()
 export class TaskService {
@@ -31,12 +32,10 @@ export class TaskService {
             include: {
                 members: {
                     include: {
-                        user: true,
-                        task: true
+                        user: true
                     }
-
                 },
-                subTasks: true
+                creator: true
             }
         });
     }
@@ -48,7 +47,7 @@ export class TaskService {
     }
 
     async getUsersTasks(userId: string) {
-        return this.prismaService.task.findMany({
+        const records = await this.prismaService.task.findMany({
             where: {
                 OR: [
                     {
@@ -63,16 +62,34 @@ export class TaskService {
                     }
                 ]
             },
+            orderBy: {
+                createdAt: 'asc'
+            },
             include: {
-                members: true,
-                subTasks: true
+                members: {
+                    include: {
+                        user: true
+                    }
+                },
+                creator: true
 
             }
         })
+        console.log(records)
+        return records
     }
 
     async addMemberToTask(payload: AddMember) {
         const { taskId, userId } = payload;
+        const isAlreadyExist = await this.prismaService.member.findFirst({
+            where: {
+                taskId,
+                userId
+            }
+        })
+        if (isAlreadyExist) {
+            return isAlreadyExist;
+        }
         return this.prismaService.member.create({
             data: {
                 taskId,
@@ -88,7 +105,7 @@ export class TaskService {
                 taskId,
                 userId
             }
-        });
+        })
     }
 
     async getMembers(taskId: string) {
@@ -105,7 +122,7 @@ export class TaskService {
         });
     }
 
-    async updateSubTask(payload: CreateSubTask, subTaskId: string) {
+    async updateSubTask(payload: UpdateSubTask, subTaskId: string) {
         return this.prismaService.subTask.update({
             where: { id: subTaskId },
             data: payload
@@ -116,6 +133,9 @@ export class TaskService {
         return this.prismaService.subTask.findMany({
             where: {
                 taskId
+            },
+            orderBy: {
+                createdAt: 'desc'
             }
         });
     }

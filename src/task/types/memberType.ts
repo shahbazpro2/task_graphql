@@ -6,8 +6,11 @@ export class Member {
     @Field({ nullable: true })
     id: string;
 
+    @Field({ nullable: true })
+    userId: string;
+
     @Field(() => User, { nullable: true })
-    userId: User;
+    user: User;
 
     @Field({ nullable: true })
     taskId: string;

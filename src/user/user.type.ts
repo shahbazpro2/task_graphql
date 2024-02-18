@@ -1,9 +1,9 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { IsOptional } from "class-validator";
 
 @ObjectType()
 export class User {
-    @Field({ nullable: true })
+    @Field(() => ID, { nullable: true })
     @IsOptional()
     id: string;
 
